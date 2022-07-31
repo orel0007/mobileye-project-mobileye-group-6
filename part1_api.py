@@ -6,7 +6,7 @@ try:
 
     import numpy as np
     from scipy import signal as sg
-    from scipy.ndimage.filters import maximum_filter
+    from scipy.ndimage import maximum_filter
 
     from PIL import Image
 
@@ -59,7 +59,6 @@ def test_find_tfl_lights(image_path, json_path=None, fig_num=None):
     red_x, red_y, green_x, green_y = find_tfl_lights(image)
     plt.plot(red_x, red_y, 'ro', color='r', markersize=4)
     plt.plot(green_x, green_y, 'ro', color='g', markersize=4)
-
 
 
 def main(argv=None):
