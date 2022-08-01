@@ -60,6 +60,22 @@ def show_image_and_gt(image, objs, fig_num=None):
         if len(labels) > 1:
             plt.legend()
 
+def get_ker(url):
+    image = Image.open(url)
+    # convert image to numpy array
+    data = np.array(image)
+    grayImage = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
+
+    sum = np.sum(grayImage)
+
+    grayImage = grayImage - (sum / grayImage.size)
+
+    # (thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+    # plt.imshow(blackAndWhiteImage)
+    # plt.show()
+
+    return grayImage
+
 
 def test_find_tfl_lights(image_path, json_path=None, fig_num=None):
     """
