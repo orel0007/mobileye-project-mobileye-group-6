@@ -1,12 +1,16 @@
+
+
 try:
     import os
     import json
     import glob
     import argparse
+    import cv2
 
     import numpy as np
-    from scipy import signal as sg
+    from scipy import signal as sg, ndimage
     from scipy.ndimage import maximum_filter
+    from scipy.ndimage import convolve
 
     from PIL import Image
 
@@ -25,13 +29,28 @@ def find_tfl_lights(c_image: np.ndarray, **kwargs):
     """
     ### WRITE YOUR CODE HERE ###
     ### USE HELPER FUNCTIONS ###
-    return [500, 510, 520], [500, 500, 500], [700, 710], [500, 500]
+    return [500, 800, 520], [500, 500, 500], [700, 710], [500, 500]
 
 
 ### GIVEN CODE TO TEST YOUR IMPLENTATION AND PLOT THE PICTURES
 def show_image_and_gt(image, objs, fig_num=None):
     plt.figure(fig_num).clf()
     plt.imshow(image)
+
+    grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    (thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+
+    cv2.imshow('Black white image', blackAndWhiteImage)
+    cv2.imshow('Gray image', grayImage)
+    # print(grayImage)
+    weight = np.array([[-1/9, -1/9, -1/9],
+                       [-1/9, +8/9, -1/9],
+                       [-1/9, -1/9, -1/9]])
+    h = ndimage.convolve(grayImage, weights=weight)
+    cv2.imshow("h",h)
+    cv2.waitKey(0)
+
     labels = set()
     if objs is not None:
         for o in objs:
@@ -72,7 +91,7 @@ def main(argv=None):
     parser.add_argument("-j", "--json", type=str, help="Path to json GT for comparison")
     parser.add_argument('-d', '--dir', type=str, help='Directory to scan images in')
     args = parser.parse_args(argv)
-    default_base = "test\\"
+    default_base = "test"
 
     if args.dir is None:
         args.dir = default_base
