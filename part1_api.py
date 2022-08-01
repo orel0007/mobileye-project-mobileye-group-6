@@ -1,5 +1,3 @@
-
-
 try:
     import os
     import json
@@ -34,22 +32,21 @@ def find_tfl_lights(c_image: np.ndarray, **kwargs):
 
 ### GIVEN CODE TO TEST YOUR IMPLENTATION AND PLOT THE PICTURES
 def show_image_and_gt(image, objs, fig_num=None):
-    plt.figure(fig_num).clf()
-    plt.imshow(image)
 
-    grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    data = np.array(image)
+    grayImage = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
 
-    (thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+    url = "kernel trainer/8x8/berlin_000521_000019_leftImg8bit.png"
+    kernel = get_ker(url)
+    print("k:",kernel.shape)
+    print("i:",grayImage.shape)
+    image2 = ndimage.convolve(grayImage, weights=kernel)
 
-    cv2.imshow('Black white image', blackAndWhiteImage)
-    cv2.imshow('Gray image', grayImage)
-    # print(grayImage)
-    weight = np.array([[-1/9, -1/9, -1/9],
-                       [-1/9, +8/9, -1/9],
-                       [-1/9, -1/9, -1/9]])
-    h = ndimage.convolve(grayImage, weights=weight)
-    cv2.imshow("h",h)
-    cv2.waitKey(0)
+    f, axarr = plt.subplots(2, 1, sharex=True, sharey=True)
+    axarr[0].title.set_text('Before Kernel')
+    axarr[1].title.set_text('After Kernel')
+    axarr[0].imshow(image)
+    axarr[1].imshow(image2)
 
     labels = set()
     if objs is not None:
@@ -60,6 +57,7 @@ def show_image_and_gt(image, objs, fig_num=None):
         if len(labels) > 1:
             plt.legend()
 
+
 def get_ker(url):
     image = Image.open(url)
     # convert image to numpy array
@@ -69,6 +67,14 @@ def get_ker(url):
     sum = np.sum(grayImage)
 
     grayImage = grayImage - (sum / grayImage.size)
+
+
+    f, axarr = plt.subplots(2, 1, sharex=True, sharey=True)
+    axarr[0].title.set_text('Before Kernel')
+    axarr[1].title.set_text('After Kernel')
+    axarr[0].imshow(image)
+    axarr[1].imshow(grayImage)
+    plt.show()
 
     # (thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
     # plt.imshow(blackAndWhiteImage)
