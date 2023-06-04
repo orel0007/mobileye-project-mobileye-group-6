@@ -13,3 +13,4 @@ their distance from the vehicle using image processing technologies, Neural netw
 - matplotlib
 - skimage
 - MobilEyee
+![Traffic light detection](https://github.com/orel0007/mobileye-project-mobileye-group-6/assets/21269821/9b754a8f-cdc7-4b88-befa-43871321ea2e)
