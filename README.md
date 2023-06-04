@@ -12,4 +12,4 @@ pandas
 scipy 
 matplotlib
 skimage
-MobilEyee ‏‏צילום מסך (148)
+MobilEyee
